@@ -15,7 +15,11 @@ const getWorker = (file, content, options) => {
     const fallbackWorkerPath = options.fallback === false ? 'null' : workerPublicPath;
     return `require(${createInlineWorkerPath})(${JSON.stringify(content)}, ${fallbackWorkerPath})`;
   }
-  return `new Worker(${workerPublicPath} + window.location.search)`;
+  let queryParams = "";
+  if (options.queryParams) {
+    queryParams = location.search;
+  }
+  return `new Worker(${workerPublicPath + queryParams})`;
 };
 
 module.exports = function workerLoader() {};
